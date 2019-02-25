@@ -12,7 +12,7 @@ import urlparse
 #         pass
 
 
-target_url = "http://gibson.com"
+target_url = "http://.com" #place the url you wish to search here
 target_links = []
 
 def extract_links_from(url):
@@ -20,9 +20,9 @@ def extract_links_from(url):
     return re.findall('(?:href=")(.*?)"', response.content)
 
 def crawl(url):
-    href_links = extract_links_from(target_url)
+    href_links = extract_links_from(url)
     for link in href_links:
-        link = urlparse.urljoin(target_url, link)
+        link = urlparse.urljoin(url, link)
 
         if "#" in link:
             link = link.split("#")[0]
@@ -30,6 +30,7 @@ def crawl(url):
         if target_url in link and link not in target_links: #remove exernal links from the search
             target_links.append(link)
             print(link) #get the html code from the page
+            crawl(link)
 
 
 crawl(target_url)
